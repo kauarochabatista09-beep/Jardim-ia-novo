@@ -1,49 +1,41 @@
 async function enviarImagem() {
-  const input = document.getElementById("file");
+  const fileInput = document.getElementById("file");
   const resultado = document.getElementById("resultado");
 
-  if (!input || !input.files || input.files.length === 0) {
-    alert("Escolha uma imagem primeiro!");
+  if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+    alert("Escolha uma imagem primeiro.");
     return;
   }
 
-  resultado.innerHTML = `<p>⏳ Analisando... aguarde</p>`;
+  const file = fileInput.files[0];
+
+  resultado.innerHTML = "⏳ Analisando imagem...";
+
+  const formData = new FormData();
+  formData.append("imagem", file);
 
   try {
-    const file = input.files[0];
-
-    const base64 = await toBase64(file);
-
     const r = await fetch("/api/analisar", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imagemBase64: base64 }),
+      body: formData,
     });
 
     const data = await r.json();
 
     if (!r.ok) {
-      resultado.innerHTML = `<p style="color:red;">Erro: ${data.error || "Erro desconhecido"}</p>`;
+      console.log("Erro API:", data);
+      resultado.innerHTML = "❌ Erro: " + (data.error || "Falha na análise");
       return;
     }
 
     resultado.innerHTML = `
       <h2>Problema</h2>
       <p>${data.problema || "Não identificado"}</p>
-
       <h2>Solução</h2>
-      <p>${data.solucao || "Sem solução"}</p>
+      <p>${data.solucao || "Não identificado"}</p>
     `;
   } catch (e) {
-    resultado.innerHTML = `<p style="color:red;">Falha: ${String(e)}</p>`;
+    console.log("Erro:", e);
+    resultado.innerHTML = "❌ Erro ao enviar imagem.";
   }
-}
-
-function toBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
 }
