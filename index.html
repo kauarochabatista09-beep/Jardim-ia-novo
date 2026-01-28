@@ -2,17 +2,55 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JardimIA</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    .container { max-width: 700px; margin: 0 auto; }
+    .btn {
+      background: #3fbf68;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .box { margin-top: 20px; text-align: left; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
+    h1 { color: #2e9d52; }
+    .small { color: #666; font-size: 14px; }
+    #preview { max-width: 220px; margin: 10px auto; display: none; border-radius: 10px; }
+    .erro { color: #d00000; font-weight: bold; }
+    .ok { color: #0a7a00; font-weight: bold; }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>🌱 JardimIA</h1>
-    <p>Descubra o que sua planta tem com Inteligência Artificial</p>
-    <input type="file" id="file" />
-    <button onclick="enviarImagem()">Analisar Planta</button>
-  </header>
-  <section id="resultado"></section>
+  <div class="container">
+    <h1>🌿 JardimIA</h1>
+    <p class="small">Descubra o que sua planta tem com Inteligência Artificial</p>
+
+    <input type="file" id="arquivo" accept="image/*" />
+    <br><br>
+    <img id="preview" />
+
+    <button class="btn" id="btn" onclick="analisarPlanta()">Analisar Planta</button>
+
+    <div class="box">
+      <h2>Problema</h2>
+      <div id="problema">---</div>
+
+      <h2>Solução</h2>
+      <div id="solucao">---</div>
+    </div>
+
+    <div class="box" style="margin-top: 15px;">
+      <h3>Status</h3>
+      <div id="status">Aguardando imagem...</div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
